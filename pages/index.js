@@ -9,9 +9,9 @@ export default (props) => {
                 <div>
                     <h1>Credit Clicker</h1>
                     <GameState gameTime={gameTime}>
-                        {(updateCredit, updateFinances) => (
-                            <button onClick={() => updateFinances('cash', 10)}>
-                                $10
+                        {(gameState, updateCredit, updateFinances) => (
+                            <button onClick={() => updateFinances('cash', gameState.job.wage)}>
+                                ${gameState.job.wage}
                             </button>
                         )}
                     </GameState>

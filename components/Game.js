@@ -14,6 +14,9 @@ export default class GameState extends Component {
             finances: {
                 cash: 1000
             },
+            job: {
+                wage: 10
+            },
             bills: [],
             cards: []
         }
@@ -58,17 +61,10 @@ export default class GameState extends Component {
                     <h2>${this.total(finances)}</h2>
                 </header>
                 <div>
-                    {children(this.updateCredit, this.updateFinances)}
+                    {children(this.state, this.updateCredit, this.updateFinances)}
                 </div>
                 <footer>
-                    <ol>
-                        <h4>BILLS</h4>
-                        {map(bills, (bill) => {
-                            return (
-                                <Bill.Component bill={bill} key={bill.id} payBill={this.payBill} />
-                            )
-                        })}
-                    </ol>
+                    <Bill.Component bills={bills} pay={this.payBill} />
                 </footer>
             </div>
         )
