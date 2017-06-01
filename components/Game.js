@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Bill from './Bill'
+import CreditCards from './CreditCards'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 import remove from 'lodash/remove'
@@ -51,7 +52,7 @@ export default class GameState extends Component {
     }
 
     startNewCard() {
-        const cards = CCFactory(this.state.cards)
+        const cards = CreditCards.factory(this.state.cards)
     }
 
     payBill(bill, method) {
@@ -78,13 +79,7 @@ export default class GameState extends Component {
                 </header>
                 <div>
                     <aside>
-                        <ol>
-                            {map(cards, (creditcard, idx) => {
-                                return (
-                                    <li key={idx}>${creditcard.amount}</li>
-                                )
-                            })}
-                        </ol>
+                        <CreditCards.Component cards={cards} />
                     </aside>
                     {children(this.state, this.updateCredit, this.updateFinances, this.startNewCard)}
                 </div>

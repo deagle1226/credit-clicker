@@ -11,12 +11,16 @@ export default class GameContainer extends Component {
     }
 
     componentDidMount() {
-        window.requestAnimationFrame(this.update)
+        this.loop = window.requestAnimationFrame(this.update)
+    }
+
+    componentWillUnmount() {
+        window.cancelAnimationFrame(this.loop)
     }
 
     update(timestamp) {
         this.setState({ gameTime: timestamp - this.state.start, start: this.state.start || timestamp })
-        window.requestAnimationFrame(this.update)
+        this.loop = window.requestAnimationFrame(this.update)
     }
 
     render() {
