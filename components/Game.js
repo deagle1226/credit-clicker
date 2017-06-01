@@ -3,6 +3,9 @@ import ScoreDial from '@ck/score-dial'
 import { RATINGS } from '@ck/score-dial/lib/constants'
 import Bill from './Bill'
 import CreditCards from './CreditCards'
+import Job from './Job'
+import Layout from './Layout'
+import { daily } from '../utils/time'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 import remove from 'lodash/remove'
@@ -20,7 +23,9 @@ export default class GameState extends Component {
                 cash: 1000
             },
             job: {
-                wage: 10
+                wage: 10,
+                title: 'Minimum Wage Earner',
+                salary: 1
             },
             bills: [],
             cards: [],
@@ -38,6 +43,9 @@ export default class GameState extends Component {
     componentWillReceiveProps(nextProps) {
         const bills = Bill.factory(this.state.bills, nextProps.gameTime)
         this.setState({ bills })
+        daily(nextProps.gameTime, () => {
+            this.updateFinances('cash', this.state.job.salary)
+        })
     }
 
     updateCredit(key, delta) {
@@ -76,7 +84,7 @@ export default class GameState extends Component {
         const bills = this.state.bills
         remove(bills, b => b.id === bill.id)
         const score = Math.round(this.state.credit.score - (bill.amount / 10))
-        this.setState({ bills, credit: { score } })
+        this.setState({ credit: { score } })
     }
 
     total(amounts) {
@@ -93,7 +101,7 @@ export default class GameState extends Component {
     }
 
     render() {
-        const { credit, finances, bills, cards } = this.state
+        const { credit, finances, job, bills, cards } = this.state
         const { gameTime, children } = this.props
         if (credit.score < 300) {
             return (
@@ -103,19 +111,36 @@ export default class GameState extends Component {
         const scoreBand = find(RATINGS, rating => inRange(credit.score, rating.range[0], rating.range[1] + 1))
         return (
             <div>
-                <header>
-                    <h2>${this.total(finances)}</h2>
-                </header>
-                <ScoreDial score={{ value: credit.score, label: scoreBand.text }} width="33%" />
-                <div>
-                    <aside>
-                        <CreditCards.Component cards={cards} pay={this.payCardBalance} selectActiveCard={this.selectActiveCard} activeCardIndex={this.state.activeCard}/>
-                    </aside>
-                    {children(this.state, this.updateCredit, this.updateFinances, this.startNewCard)}
-                </div>
-                <footer>
-                    <Bill.Component bills={bills} pay={this.payBill} defect={this.defectBill} gameTime={gameTime} />
-                </footer>
+                <Layout
+                    head={(
+                        <div className="header">
+                            <ScoreDial score={{ value: credit.score, label: scoreBand.text }} width="140px" />
+                            <h2>Bank: ${this.total(finances)}</h2>
+                        </div>
+                    )}
+                    side={(
+                        <div>
+                            <CreditCards.Component cards={cards} pay={this.payCardBalance} selectActiveCard={this.selectActiveCard} activeCardIndex={this.state.activeCard}/>
+                            <button onClick={this.startNewCard}>
+                                New Card
+                            </button>
+                        </div>
+                    )}
+                    body={(
+                        <Job.Component job={job} updateFinances={this.updateFinances} />
+                    )}
+                    foot={(
+                        <Bill.Component bills={bills} pay={this.payBill} defect={this.defectBill} gameTime={gameTime} />
+                    )}
+                />
+                <style jsx>{`
+                    .header {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-around;
+                        align-items: center;
+                    }
+                `}</style>
             </div>
         )
     }

@@ -9,18 +9,7 @@ export default (props) => {
             {gameTime => (
                 <div>
                     <h1>Credit Clicker {date(gameTime)}</h1>
-                    <GameState gameTime={gameTime}>
-                            {(gameState, updateCredit, updateFinances, startNewCard) => (
-                                <div>
-                                <button onClick={() => updateFinances('cash', gameState.job.wage)}>
-                                        ${gameState.job.wage}
-                                    </button>
-                                    <button onClick={startNewCard}>
-                                        New Card
-                                    </button>
-                                </div>
-                            )}
-                    </GameState>
+                    <GameState gameTime={gameTime} />
                     <style global jsx>{`
                         @import url('https://fonts.googleapis.com/css?family=Rubik:400,500,700');
                         body {

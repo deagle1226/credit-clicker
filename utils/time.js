@@ -18,3 +18,7 @@ export function date(timestamp) {
     const { days, hours } = segments(timestamp)
     return `Day ${days}, Hour ${hours}`
 }
+
+export function daily(timestamp, callback) {
+    if (timestamp % DAY < 16) callback()
+}
