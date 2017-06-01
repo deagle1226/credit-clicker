@@ -25,6 +25,7 @@ export default class GameState extends Component {
         this.updateFinances = this.updateFinances.bind(this)
         this.startNewCard = this.startNewCard.bind(this)
         this.payBill = this.payBill.bind(this)
+        this.payCardBalance = this.payCardBalance.bind(this)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -60,6 +61,11 @@ export default class GameState extends Component {
         return reduce(amounts, (result, amount) => result + amount, 0)
     }
 
+    payCardBalance(card, amount) {
+        card.payBalance(amount)
+        this.updateFinances('cash', -amount)
+    }
+
     render() {
         const { credit, finances, bills, cards } = this.state
         const { gameTime, children } = this.props
@@ -71,7 +77,7 @@ export default class GameState extends Component {
                 </header>
                 <div>
                     <aside>
-                        <CreditCards.Component cards={cards} />
+                        <CreditCards.Component cards={cards} pay={this.payCardBalance}/>
                     </aside>
                     {children(this.state, this.updateCredit, this.updateFinances, this.startNewCard)}
                 </div>

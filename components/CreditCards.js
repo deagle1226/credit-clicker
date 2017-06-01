@@ -29,14 +29,13 @@ function CCFactory(creditcards, gameTime, limit) {
     return creditcards;
 }
 
-function CCComponent({card, idx}) {
-    console.log(card)
+function CCComponent({card, idx, payCard}) {
     return (
         <div>
             <header>Card #{card.id}</header>
             <b>${card.balance} / ${card.limit}</b>
             <div>
-                <button onClick={() => card.payBalance(card.balance)}>Pay</button>
+                <button onClick={() => payCard(card, card.balance)}>Pay</button>
             </div>
         </div>
     )
@@ -45,12 +44,12 @@ function CCComponent({card, idx}) {
 export default {
     Model: CreditCard,
     factory: CCFactory,
-    Component: ({cards}) => (
+    Component: ({cards, pay}) => (
         <ol>
             <h3>Credit Cards</h3>
             {map(cards, (creditcard, idx) => {
                 return (
-                    <CCComponent card={creditcard} key={idx} />
+                    <CCComponent card={creditcard} key={idx} payCard={pay} />
                 )
             })}
         </ol>
