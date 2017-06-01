@@ -20,6 +20,7 @@ export default class GameState extends Component {
             },
             bills: [],
             cards: [],
+            activeCard: null,
         }
         this.updateCredit = this.updateCredit.bind(this)
         this.updateFinances = this.updateFinances.bind(this)
@@ -27,6 +28,7 @@ export default class GameState extends Component {
         this.payBill = this.payBill.bind(this)
         this.payCardBalance = this.payCardBalance.bind(this)
         this.defectBill = this.defectBill.bind(this)
+        this.selectActiveCard = this.selectActiveCard.bind(this)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -47,15 +49,23 @@ export default class GameState extends Component {
     }
 
     payBill(bill, method) {
+        var success = false
         if (method === 'cash') {
             this.updateFinances('cash', -bill.amount)
+            success = true
         }
-        if(method === 'card') {
-            this.state.cards[0].addBalance(bill.amount)
+        if(method === 'card' && this.state.activeCard != null) {
+            var card = this.state.cards[this.state.activeCard]
+            if(card.limit - card.balance >= bill.amount) {
+                card.addBalance(bill.amount)
+                success = true
+            }
         }
-        const bills = this.state.bills
-        remove(bills, b => b.id === bill.id)
-        this.setState({ bills })
+        if(success) {
+            const bills = this.state.bills
+            remove(bills, b => b.id === bill.id)
+            this.setState({ bills })
+        }
     }
 
     defectBill(bill) {
@@ -74,6 +84,10 @@ export default class GameState extends Component {
         this.updateFinances('cash', -amount)
     }
 
+    selectActiveCard(index) {
+        this.state.activeCard = index;
+    }
+
     render() {
         const { credit, finances, bills, cards } = this.state
         const { gameTime, children } = this.props
@@ -85,7 +99,7 @@ export default class GameState extends Component {
                 </header>
                 <div>
                     <aside>
-                        <CreditCards.Component cards={cards} pay={this.payCardBalance}/>
+                        <CreditCards.Component cards={cards} pay={this.payCardBalance} selectActiveCard={this.selectActiveCard} activeCardIndex={this.state.activeCard}/>
                     </aside>
                     {children(this.state, this.updateCredit, this.updateFinances, this.startNewCard)}
                 </div>
