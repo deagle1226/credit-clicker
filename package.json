@@ -1,0 +1,27 @@
+{
+  "name": "credit-clicker",
+  "version": "1.0.0",
+  "description": "Idle clicker game for Credit Karma",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deagle1226/credit-clicker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deagle1226/credit-clicker/issues"
+  },
+  "homepage": "https://github.com/deagle1226/credit-clicker#readme",
+  "dependencies": {
+    "next": "^3.0.0-beta6",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  }
+}
