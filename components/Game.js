@@ -1,18 +1,8 @@
 import React, { Component } from 'react'
+import Bill from './Bill'
 import map from 'lodash/map'
-
-class Bill {
-    constructor(gameTime) {
-        this.amount = Math.round(gameTime / 1000)
-    }
-}
-
-function billsFactory(bills, gameTime) {
-    if (gameTime % 10000 < 16) {
-        bills.push(new Bill(gameTime))
-    }
-    return bills
-}
+import reduce from 'lodash/reduce'
+import remove from 'lodash/remove'
 
 export default class GameState extends Component {
     constructor(props) {
@@ -22,17 +12,18 @@ export default class GameState extends Component {
                 score: 500
             },
             finances: {
-                total: 1000
+                cash: 1000
             },
             bills: [],
             cards: []
         }
         this.updateCredit = this.updateCredit.bind(this)
         this.updateFinances = this.updateFinances.bind(this)
+        this.payBill = this.payBill.bind(this)
     }
 
     componentWillReceiveProps(nextProps) {
-        const bills = billsFactory(this.state.bills, nextProps.gameTime)
+        const bills = Bill.factory(this.state.bills, nextProps.gameTime)
         this.setState({ bills })
     }
 
@@ -44,6 +35,19 @@ export default class GameState extends Component {
         this.setState({ finances: { [key]: this.state.finances[key] + delta } })
     }
 
+    payBill(bill, method) {
+        if (method === 'cash') {
+            this.updateFinances('cash', -bill.amount)
+        }
+        const bills = this.state.bills
+        remove(bills, b => b.id === bill.id)
+        this.setState({ bills })
+    }
+
+    total(amounts) {
+        return reduce(amounts, (result, amount) => result + amount, 0)
+    }
+
     render() {
         const { credit, finances, bills } = this.state
         const { gameTime, children } = this.props
@@ -51,14 +55,17 @@ export default class GameState extends Component {
             <div>
                 <header>
                     <h2>Credit Score: {credit.score}</h2>
-                    <h2>${finances.total}</h2>
+                    <h2>${this.total(finances)}</h2>
                 </header>
-                {children(this.updateCredit, this.updateFinances)}
+                <div>
+                    {children(this.updateCredit, this.updateFinances)}
+                </div>
                 <footer>
                     <ol>
-                        {map(bills, (bill, idx) => {
+                        <h4>BILLS</h4>
+                        {map(bills, (bill) => {
                             return (
-                                <li key={idx}>${bill.amount}</li>
+                                <Bill.Component bill={bill} key={bill.id} payBill={this.payBill} />
                             )
                         })}
                     </ol>
