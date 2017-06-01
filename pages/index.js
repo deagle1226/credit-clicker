@@ -11,7 +11,7 @@ export default (props) => {
                     <GameState gameTime={gameTime}>
                             {(updateCredit, updateFinances, startNewCard) => (
                                 <div>
-                                    <button onClick={() => updateFinances('total', 10)}>
+                                <button onClick={() => updateFinances('cash', 10)}>
                                         $10
                                     </button>
                                     <button onClick={startNewCard}>
