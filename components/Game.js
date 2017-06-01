@@ -11,6 +11,8 @@ import reduce from 'lodash/reduce'
 import remove from 'lodash/remove'
 import find from 'lodash/find'
 import inRange from 'lodash/inRange'
+import { totalCardsUtilization } from '../utils/creditTools'
+import { scoreDelta } from '../utils/creditTools'
 
 export default class GameState extends Component {
     constructor(props) {
@@ -45,6 +47,7 @@ export default class GameState extends Component {
         this.setState({ bills })
         daily(nextProps.gameTime, () => {
             this.updateFinances('cash', this.state.job.salary)
+            this.updateCredit('score', scoreDelta(this.state.cards))
         })
     }
 
@@ -115,6 +118,7 @@ export default class GameState extends Component {
                     head={(
                         <div className="header">
                             <ScoreDial score={{ value: credit.score, label: scoreBand.text }} width="140px" />
+                            <h3>Credit Utilization: {totalCardsUtilization(this.state.cards)}%</h3>
                             <h2>Bank: ${this.total(finances)}</h2>
                         </div>
                     )}
