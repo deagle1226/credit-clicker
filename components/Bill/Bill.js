@@ -1,6 +1,7 @@
 import React from 'react'
+import map from 'lodash/map'
 
-export default function BillComponent({ bill, payBill }) {
+function BillComponent({ bill, payBill }) {
     return (
         <div>
             <header>Bill #{bill.id}</header>
@@ -9,5 +10,18 @@ export default function BillComponent({ bill, payBill }) {
                 <button onClick={() => payBill(bill, 'cash')}>Pay With Cash</button>
             </div>
         </div>
+    )
+}
+
+export default function Bills({ bills, pay }) {
+    return (
+        <ol>
+            <h4>BILLS</h4>
+            {map(bills, (bill) => {
+                return (
+                    <BillComponent bill={bill} key={bill.id} payBill={pay} />
+                )
+            })}
+        </ol>
     )
 }
