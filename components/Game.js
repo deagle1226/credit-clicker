@@ -5,17 +5,6 @@ import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 import remove from 'lodash/remove'
 
-class CreditCard {
-    constructor() {
-        this.amount = 1000;
-    }
-}
-
-function CCFactory(creditcards) {
-    creditcards.push(new CreditCard())
-    return creditcards;
-}
-
 export default class GameState extends Component {
     constructor(props) {
         super(props)
@@ -30,7 +19,7 @@ export default class GameState extends Component {
                 wage: 10
             },
             bills: [],
-            cards: []
+            cards: [],
         }
         this.updateCredit = this.updateCredit.bind(this)
         this.updateFinances = this.updateFinances.bind(this)
@@ -52,12 +41,15 @@ export default class GameState extends Component {
     }
 
     startNewCard() {
-        const cards = CreditCards.factory(this.state.cards)
+        const cards = CreditCards.factory(this.state.cards, this.props.gameTime, 1000)
     }
 
     payBill(bill, method) {
         if (method === 'cash') {
             this.updateFinances('cash', -bill.amount)
+        }
+        if(method === 'card') {
+            this.state.cards[0].addBalance(bill.amount)
         }
         const bills = this.state.bills
         remove(bills, b => b.id === bill.id)

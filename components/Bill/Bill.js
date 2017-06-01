@@ -8,6 +8,7 @@ function BillComponent({ bill, payBill }) {
             <b>${bill.amount}</b>
             <div>
                 <button onClick={() => payBill(bill, 'cash')}>Pay With Cash</button>
+                <button onClick={() => payBill(bill, 'card')}>Pay With Card</button>
             </div>
         </div>
     )
