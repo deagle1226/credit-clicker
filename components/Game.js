@@ -36,6 +36,7 @@ export default class GameState extends Component {
         this.updateFinances = this.updateFinances.bind(this)
         this.startNewCard = this.startNewCard.bind(this)
         this.payBill = this.payBill.bind(this)
+        this.defectBill = this.defectBill.bind(this)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -64,6 +65,13 @@ export default class GameState extends Component {
         this.setState({ bills })
     }
 
+    defectBill(bill) {
+        const bills = this.state.bills
+        remove(bills, b => b.id === bill.id)
+        const score = this.state.credit.score - (bill.amount / 10)
+        this.setState({ bills, credit: { score } })
+    }
+
     total(amounts) {
         return reduce(amounts, (result, amount) => result + amount, 0)
     }
@@ -84,7 +92,7 @@ export default class GameState extends Component {
                     {children(this.state, this.updateCredit, this.updateFinances, this.startNewCard)}
                 </div>
                 <footer>
-                    <Bill.Component bills={bills} pay={this.payBill} />
+                    <Bill.Component bills={bills} pay={this.payBill} defect={this.defectBill} gameTime={gameTime} />
                 </footer>
             </div>
         )
