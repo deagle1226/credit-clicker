@@ -6,6 +6,7 @@ import CreditCards from './CreditCards'
 import Job from './Job'
 import Layout from './Layout'
 import { daily } from '../utils/time'
+import { MinimumWageEarner } from '../content/jobs'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 import remove from 'lodash/remove'
@@ -24,17 +25,14 @@ export default class GameState extends Component {
             finances: {
                 cash: 1000
             },
-            job: {
-                wage: 10,
-                title: 'Minimum Wage Earner',
-                salary: 1
-            },
+            job: MinimumWageEarner,
             bills: [],
             cards: [],
             activeCard: null,
         }
         this.updateCredit = this.updateCredit.bind(this)
         this.updateFinances = this.updateFinances.bind(this)
+        this.updateJob = this.updateJob.bind(this)
         this.startNewCard = this.startNewCard.bind(this)
         this.payBill = this.payBill.bind(this)
         this.payCardBalance = this.payCardBalance.bind(this)
@@ -57,6 +55,21 @@ export default class GameState extends Component {
 
     updateFinances(key, delta) {
         this.setState({ finances: { [key]: this.state.finances[key] + delta } })
+    }
+
+    updateJob(promotion) {
+        if (promotion.cost.credit && promotion.cost.credit > this.state.credit.score) {
+            return
+        }
+        if (promotion.cost.cash > this.state.finances.cash) {
+            return
+        }
+        this.updateFinances('cash', -promotion.cost.cash)
+        promotion.start = this.props.gameTime
+        promotion.end = promotion.start + promotion.cost.time
+        setTimeout(() => {
+            this.setState({ job: promotion.job })
+        }, promotion.cost.time)
     }
 
     startNewCard() {
@@ -131,7 +144,7 @@ export default class GameState extends Component {
                         </div>
                     )}
                     body={(
-                        <Job.Component job={job} updateFinances={this.updateFinances} />
+                        <Job.Component job={job} updateFinances={this.updateFinances} updateJob={this.updateJob} gameTime={gameTime} />
                     )}
                     foot={(
                         <Bill.Component bills={bills} pay={this.payBill} defect={this.defectBill} gameTime={gameTime} />
