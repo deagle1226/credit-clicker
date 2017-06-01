@@ -1,2 +1,11 @@
 .next
+.DS_Store*
+._.DS_Store
+.sass-cache
 node_modules
+coverage
+.idea/
+npm-debug.log
+dist/
+lib/
+.happypack/
