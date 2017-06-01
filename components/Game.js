@@ -1,16 +1,20 @@
 import React, { Component } from 'react'
+import ScoreDial from '@ck/score-dial'
+import { RATINGS } from '@ck/score-dial/lib/constants'
 import Bill from './Bill'
 import CreditCards from './CreditCards'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 import remove from 'lodash/remove'
+import find from 'lodash/find'
+import inRange from 'lodash/inRange'
 
 export default class GameState extends Component {
     constructor(props) {
         super(props)
         this.state = {
             credit: {
-                score: 500
+                score: 650
             },
             finances: {
                 cash: 1000
@@ -71,7 +75,7 @@ export default class GameState extends Component {
     defectBill(bill) {
         const bills = this.state.bills
         remove(bills, b => b.id === bill.id)
-        const score = this.state.credit.score - (bill.amount / 10)
+        const score = Math.round(this.state.credit.score - (bill.amount / 10))
         this.setState({ bills, credit: { score } })
     }
 
@@ -91,12 +95,18 @@ export default class GameState extends Component {
     render() {
         const { credit, finances, bills, cards } = this.state
         const { gameTime, children } = this.props
+        if (credit.score < 300) {
+            return (
+                <h1>Game Over</h1>
+            )
+        }
+        const scoreBand = find(RATINGS, rating => inRange(credit.score, rating.range[0], rating.range[1] + 1))
         return (
             <div>
                 <header>
-                    <h2>Credit Score: {credit.score}</h2>
                     <h2>${this.total(finances)}</h2>
                 </header>
+                <ScoreDial score={{ value: credit.score, label: scoreBand.text }} width="33%" />
                 <div>
                     <aside>
                         <CreditCards.Component cards={cards} pay={this.payCardBalance} selectActiveCard={this.selectActiveCard} activeCardIndex={this.state.activeCard}/>

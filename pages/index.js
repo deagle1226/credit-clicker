@@ -21,6 +21,12 @@ export default (props) => {
                                 </div>
                             )}
                     </GameState>
+                    <style global jsx>{`
+                        @import url('https://fonts.googleapis.com/css?family=Rubik:400,500,700');
+                        body {
+                            font-family: 'Rubik', sans-serif;
+                        }
+                    `}</style>
                 </div>
             )}
         </GameContainer>

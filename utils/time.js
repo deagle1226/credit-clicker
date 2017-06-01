@@ -3,9 +3,9 @@ export const DAY = HOUR * 24
 
 function segments(timestamp) {
     let time = timestamp
-    const days = Math.round(time / DAY)
+    const days = Math.floor(time / DAY)
     time = time - (days * DAY)
-    const hours = Math.round(time / HOUR) + 12
+    const hours = Math.round(time / HOUR)
     return { days, hours }
 }
 
