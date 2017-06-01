@@ -1,5 +1,4 @@
-export const HOUR = 500
-export const DAY = HOUR * 24
+import { DAY, HOUR } from '../config'
 
 function segments(timestamp) {
     let time = timestamp
