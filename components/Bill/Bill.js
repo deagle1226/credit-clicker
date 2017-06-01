@@ -1,5 +1,6 @@
 import React from 'react'
 import map from 'lodash/map'
+import { timeleft } from '../../utils/time'
 
 class BillComponent extends React.Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class BillComponent extends React.Component {
         return (
             <div>
                 <header>Bill #{bill.id}</header>
-                <div><b>${bill.amount}</b> due in {bill.due - gameTime}</div>
+                <div><b>${bill.amount}</b> due in {timeleft(bill.due - gameTime)}</div>
                 <div>
                     <button onClick={() => payBill(bill, 'cash')}>Pay With Cash</button>
                 </div>
