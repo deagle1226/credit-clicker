@@ -10,7 +10,7 @@ class BillComponent extends React.Component {
     componentWillReceiveProps(nextProps) {
         daily(nextProps.gameTime, () => {
             if (this.props.bill.due - nextProps.gameTime < 0) {
-                this.props.defect(this.props.bill)
+                setTimeout(() => this.props.defect(this.props.bill), 1)
             }
         })
     }
