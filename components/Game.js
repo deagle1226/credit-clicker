@@ -193,14 +193,16 @@ class GameState extends Component {
                     side={(
                         <div>
                             <CreditCards.Component cards={cards} pay={this.payCardBalance} selectActiveCard={this.selectActiveCard} activeCardIndex={this.state.activeCard}/>
-                            <Offers.Component offers={offers} apply={this.applyForOffer} score={this.state.credit.score}/>
                         </div>
                     )}
                     body={(
                         <Job.Component job={job} updateFinances={this.updateFinances} updateJob={this.updateJob} gameTime={gameTime} />
                     )}
                     foot={(
-                        <Bill.Component bills={bills} pay={this.payBill} defect={this.defectBill} gameTime={gameTime} />
+                        <div>
+                            <Offers.Component offers={offers} apply={this.applyForOffer} score={this.state.credit.score}/>
+                            <Bill.Component bills={bills} pay={this.payBill} defect={this.defectBill} gameTime={gameTime} />
+                        </div>
                     )}
                 />
                 <button style={{ position: 'absolute', right: 0, top: 15 }} onClick={this.save}>

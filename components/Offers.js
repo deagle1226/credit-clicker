@@ -25,12 +25,22 @@ function OfferComponent({offer, apply, score}) {
         odds = "Fair"
     }
     return (
-        <div>
+        <div className="offer">
             <header>Card</header>
             <b>Limit: ${offer.limit}, Interest Rate: {offer.interestRate}%</b>
             <div>
                 <button onClick={() => apply(offer)}>{odds}</button>
             </div>
+            <style jsx>{`
+                .offer {
+                    background: #fff;
+                    display: inline-block;
+                    margin: 5px;
+                    padding: 5px;
+                    border: 1px solid #000;
+                    width: 20%;
+                }
+            `}</style>
         </div>
     )
 }
