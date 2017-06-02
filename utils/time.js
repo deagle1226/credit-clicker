@@ -10,7 +10,8 @@ function segments(timestamp) {
 
 export function timeleft(timestamp) {
     const { days, hours } = segments(timestamp)
-    return `${days} day${days !== 1 ? 's' : ''}, ${hours} hour${hours !== 1 ? 's' : ''}`
+    if (days >= 0) return `${days} day${days !== 1 ? 's' : ''}, ${hours} hour${hours !== 1 ? 's' : ''}`
+    return `${Math.abs(days)} day${Math.abs(days) !== 1 ? 's' : ''} ago`
 }
 
 export function date(timestamp) {

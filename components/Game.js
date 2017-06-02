@@ -156,8 +156,6 @@ class GameState extends Component {
     }
 
     defectBill(bill) {
-        const bills = this.state.bills
-        remove(bills, b => b.id === bill.id)
         const score = Math.round(this.state.credit.score - (bill.amount / 10))
         this.setState({ credit: { score } })
     }

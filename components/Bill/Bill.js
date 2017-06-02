@@ -1,6 +1,6 @@
 import React from 'react'
 import map from 'lodash/map'
-import { timeleft } from '../../utils/time'
+import { timeleft, daily } from '../../utils/time'
 
 class BillComponent extends React.Component {
     constructor(props) {
@@ -8,21 +8,34 @@ class BillComponent extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.bill.due - nextProps.gameTime < 0) {
-            this.props.defect(this.props.bill)
-        }
+        daily(nextProps.gameTime, () => {
+            if (this.props.bill.due - nextProps.gameTime < 0) {
+                this.props.defect(this.props.bill)
+            }
+        })
     }
 
     render() {
         const { bill, payBill, gameTime } = this.props
+        const timeLeft = bill.due - gameTime
         return (
-            <div>
+            <div style={{ color: timeLeft > 0 ? 'black' : 'red' }} className="bill">
                 <header>Bill #{bill.id}</header>
-                <div><b>${bill.amount}</b> due in {timeleft(bill.due - gameTime)}</div>
+                <div><b>${bill.amount}</b> due in {timeleft(timeLeft)}</div>
                 <div>
                     <button onClick={() => payBill(bill, 'cash')}>Pay With Cash</button>
                     <button onClick={() => payBill(bill, 'card')}>Pay With Card</button>
                 </div>
+                <style jsx>{`
+                    .bill {
+                        background: #fff;
+                        display: inline-block;
+                        margin: 5px;
+                        padding: 5px;
+                        border: 1px solid #000;
+                        width: 30%;
+                    }
+                `}</style>
             </div>
         )
     }
