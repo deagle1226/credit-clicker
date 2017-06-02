@@ -60,7 +60,7 @@ class GameState extends Component {
         daily(nextProps.gameTime, () => {
             this.updateFinances('cash', this.state.job.salary)
             this.updateOffers(this.state.offers)
-            setTimeout(() => this.updateCredit('score', scoreDelta(this.state.cards)), 1)
+            setTimeout(() => this.updateCredit('score', scoreDelta(this.state.cards, this.props.gameTime)), 1)
         })
     }
 
