@@ -1,4 +1,5 @@
 import { DAY, HOUR } from '../config'
+import debounce from 'lodash/debounce'
 
 function segments(timestamp) {
     let time = timestamp
@@ -20,5 +21,6 @@ export function date(timestamp) {
 }
 
 export function daily(timestamp, callback) {
-    if (timestamp % DAY < 16.7) callback()
+    const cb = debounce(callback, DAY / 2)
+    if (timestamp % DAY < 16.7) cb()
 }
