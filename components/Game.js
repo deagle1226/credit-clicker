@@ -40,6 +40,7 @@ class GameState extends Component {
         }
         this.updateCredit = this.updateCredit.bind(this)
         this.updateFinances = this.updateFinances.bind(this)
+        this.getBalance = this.getBalance.bind(this)
         this.updateJob = this.updateJob.bind(this)
         this.updateOffers = this.updateOffers.bind(this)
         this.startNewCard = this.startNewCard.bind(this)
@@ -96,6 +97,10 @@ class GameState extends Component {
         this.setState({ credit: { [key]: this.state.credit[key] + delta } })
     }
 
+    getBalance() {
+        return this.state.finances['cash']
+    }
+
     updateFinances(key, delta) {
         this.setState({ finances: { [key]: this.state.finances[key] + delta } })
     }
@@ -142,8 +147,10 @@ class GameState extends Component {
     payBill(bill, method) {
         var success = false
         if (method === 'cash') {
-            this.updateFinances('cash', -bill.amount)
-            success = true
+            if(this.getBalance() > bill.amount) {
+                this.updateFinances('cash', -bill.amount)
+                success = true
+            }
         }
         if(method === 'card' && this.state.activeCard != null) {
             var card = this.state.cards[this.state.activeCard]
