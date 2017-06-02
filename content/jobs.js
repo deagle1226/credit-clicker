@@ -1,12 +1,12 @@
 export const UltraBusinessOwner = {
-    title: 'Ultra Business Owner',
+    title: 'Pizza Magnate',
     wage: 50,
     salary: 10000,
     promotions: []
 }
 
 export const MaximumBusinessOwner = {
-    title: 'Maximum Business Owner',
+    title: 'Pizza Don',
     wage: 20,
     salary: 5000,
     promotions: [
@@ -22,7 +22,7 @@ export const MaximumBusinessOwner = {
 }
 
 export const MediumBusinessOwner = {
-    title: 'Medium Business Owner',
+    title: 'Pizza Boss',
     wage: 15,
     salary: 2000,
     promotions: [
@@ -45,7 +45,7 @@ export const UltraWageEarner = {
 }
 
 export const MaximumWageEarner = {
-    title: 'Maximum Wage Earner',
+    title: 'Pizza Management',
     wage: 20,
     salary: 2,
     promotions: [
@@ -60,7 +60,7 @@ export const MaximumWageEarner = {
 }
 
 export const MinimumBusinessOwner = {
-    title: 'Minimum Business Owner',
+    title: 'Pizza Underboss',
     wage: 10,
     salary: 200,
     promotions: [
@@ -76,7 +76,7 @@ export const MinimumBusinessOwner = {
 }
 
 export const MediumWageEarner = {
-    title: 'Medium Wage Earner',
+    title: 'Pizza Chef',
     wage: 15,
     salary: 2,
     promotions: [
@@ -99,7 +99,7 @@ export const MediumWageEarner = {
 }
 
 export const MinimumWageEarner = {
-    title: 'Minimum Wage Earner',
+    title: 'Pizza Transit Specialist',
     wage: 10,
     salary: 1,
     promotions: [
