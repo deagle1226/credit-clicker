@@ -10,13 +10,15 @@ import Job from './Job'
 import OfferSet from '../content/cards'
 import Layout from './Layout'
 import { daily } from '../utils/time'
+import { DAY, HOUR } from '../config'
 import { MinimumWageEarner } from '../content/jobs'
 import map from 'lodash/map'
+import pullAt from 'lodash/pullAt'
 import reduce from 'lodash/reduce'
 import remove from 'lodash/remove'
 import find from 'lodash/find'
 import inRange from 'lodash/inRange'
-import { totalCardsUtilization } from '../utils/creditTools'
+import { totalCardsUtilization, avgCardsAge } from '../utils/creditTools'
 import { scoreDelta } from '../utils/creditTools'
 
 class GameState extends Component {
@@ -59,16 +61,19 @@ class GameState extends Component {
         setTimeout(() => this.setState({ bills }), 1)
         daily(nextProps.gameTime, () => {
             this.updateFinances('cash', this.state.job.salary)
-            this.updateOffers(this.state.offers)
+            this.updateOffers()
             setTimeout(() => this.updateCredit('score', scoreDelta(this.state.cards, this.props.gameTime)), 1)
         })
     }
 
-    updateOffers(offersArray) {
+    updateOffers() {
+        var offersArray = this.state.offers
         var randomOffer = OfferSet[Math.floor(Math.random()*OfferSet.length)]
-        if(offersArray.length < 4) {
-            const offers = Offers.factory(offersArray, randomOffer.limit, randomOffer.rate, randomOffer.minScore, this.props.gameTime)
+        if(offersArray.length >= 4) {
+            pullAt(offersArray, [Math.floor(Math.random()*offersArray.length)])
         }
+        const offers = Offers.factory(offersArray, randomOffer.limit, randomOffer.rate, randomOffer.minScore, this.props.gameTime)
+        this.setState({ offers })
     }
 
     save() {
@@ -186,7 +191,9 @@ class GameState extends Component {
                     head={(
                         <div className="header">
                             <ScoreDial score={{ value: Math.round(credit.score), label: scoreBand.text }} width="140px" />
-                            <h3>Credit Utilization: {totalCardsUtilization(cards)}%</h3>
+                            <h3>Credit Utilization: {totalCardsUtilization(cards)}%<br/>
+                            Avg. Age of Accounts: {Math.round(avgCardsAge(cards, this.props.gameTime) / DAY)}
+                            </h3>
                             <h2>Bank: ${this.total(finances)}</h2>
                         </div>
                     )}
