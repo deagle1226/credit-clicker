@@ -20,7 +20,7 @@ class BillComponent extends React.Component {
         const timeLeft = bill.due - gameTime
         return (
             <div style={{ color: timeLeft > 0 ? 'black' : 'red' }} className="bill">
-                <header>Bill #{bill.id}</header>
+                <header>Bill #{Math.round(bill.id)}</header>
                 <div><b>${bill.amount}</b> due in {timeleft(timeLeft)}</div>
                 <div>
                     <button onClick={() => payBill(bill, 'cash')}>Pay With Cash</button>
@@ -31,9 +31,10 @@ class BillComponent extends React.Component {
                         background: #fff;
                         display: inline-block;
                         margin: 5px;
-                        padding: 5px;
+                        padding: 10px;
                         border: 1px solid #000;
-                        width: 30%;
+                        width: calc(33% - 60px);
+                        max-width: 250px;
                     }
                 `}</style>
             </div>

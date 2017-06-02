@@ -10,7 +10,7 @@ import Offers from './Offers'
 import Job from './Job'
 import OfferSet from '../content/cards'
 import Layout from './Layout'
-import { daily } from '../utils/time'
+import { daily, date } from '../utils/time'
 import { DAY, HOUR } from '../config'
 import { MinimumWageEarner } from '../content/jobs'
 import map from 'lodash/map'
@@ -194,6 +194,7 @@ class GameState extends Component {
         const scoreBand = find(RATINGS, rating => inRange(credit.score, rating.range[0], rating.range[1] + 1))
         return (
             <div>
+                <h1 className="title-time">Credit Clicker {date(gameTime)}</h1>
                 <Layout
                     head={(
                         <div className="header">

@@ -31,12 +31,18 @@ function CCFactory(creditcards, gameTime, limit) {
 
 function CCComponent({card, id, payCard, select, selected}) {
     return (
-        <div onClick={() => select(id)} style={{ border: selected ? '1px solid blue' : 'none'}}>
-            <header>Card #{card.id}</header>
+        <div className="credit-card" onClick={() => select(id)} style={{ border: selected ? '1px solid blue' : 'none'}}>
+            <header>Card #{Math.round(card.id)}</header>
             <b>${card.balance} / ${card.limit}</b>
             <div>
                 <button onClick={() => payCard(card, card.balance)}>Pay</button>
             </div>
+            <style jsx>{`
+                .credit-card {
+                    background: #eee;
+                    padding: 10px;
+                }
+            `}</style>
         </div>
     )
 }
@@ -45,8 +51,8 @@ export default {
     Model: CreditCard,
     factory: CCFactory,
     Component: ({cards, pay, selectActiveCard, activeCardIndex}) => (
-        <ol>
-            <h3>Credit Cards</h3>
+        <ol style={{ paddingRight: 15 }}>
+            <h4>CREDIT CARDS</h4>
             {map(cards, (creditcard, idx) => {
                 return (
                     <CCComponent card={creditcard} key={idx} id={idx} payCard={pay} select={selectActiveCard} selected={activeCardIndex == idx ? true : false}/>

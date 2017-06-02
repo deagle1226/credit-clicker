@@ -15,17 +15,17 @@ export default function Layout({head, side, body, foot}) {
                     flex-direction: column;
                 }
                 header.head {
-                    height: 100px;
+                    height: 140px;
                     background: #eee;
                 }
                 .middle {
                     flex-grow: 2;
                     display: flex;
                     flex-direction: row;
+                    padding: 10px 0;
                 }
                 aside.side {
                     width: 40%;
-                    max-width: 300px;
                 }
                 div.body {
                     flex-grow: 2;

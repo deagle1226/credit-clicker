@@ -50,7 +50,7 @@ export default {
     factory: OfferFactory,
     Component: ({offers, apply, score}) => (
         <ol>
-            <h3>Offers</h3>
+            <h4>OFFERS</h4>
             {map(offers, (offer, idx) => {
                 return (
                     <OfferComponent offer={offer} apply={apply} score={score} key={idx} />
