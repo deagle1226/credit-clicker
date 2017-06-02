@@ -47,7 +47,6 @@ export function scoreDelta(creditcards, currentTime) {
     else if(numAccts <= 20) { delta += 2 }
     else { delta += 3 }
 
-    console.log("credit change " + delta)
     return delta
 }
 
