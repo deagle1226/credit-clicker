@@ -118,7 +118,6 @@ class GameState extends Component {
     }
 
     applyForOffer(offer) {
-        console.log(offer.minScore + "/" + this.state.credit.score)
         var chance = Math.random();
         var success = chance < 0.4;
         if(offer.minScore + 100 < this.state.credit.score) {
