@@ -37,7 +37,7 @@ function JobComponent({ job, updateFinances, updateJob, gameTime }) {
                             updateJob(promotion)
                         }}>
                             {promotion.cost.cash && `$${promotion.cost.cash} training`}
-                            {promotion.cost.credit && `Credit: ${promotion.cost.credit}`}
+                            {promotion.cost.credit && `, Credit: ${promotion.cost.credit}`}
                         </button>
                         {promotion.start && <ProgressBar value={Math.min(1, (gameTime - promotion.start) / (promotion.end - promotion.start))} /> }
                     </div>

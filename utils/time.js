@@ -20,5 +20,5 @@ export function date(timestamp) {
 }
 
 export function daily(timestamp, callback) {
-    if (timestamp % DAY < 16) callback()
+    if (timestamp % DAY < 16.7) callback()
 }
