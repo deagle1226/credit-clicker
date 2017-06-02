@@ -1,5 +1,5 @@
 export const HOUR = 500
-export const DAY = HOUR * 24
+export const DAY = HOUR * 1
 
 function segments(timestamp) {
     let time = timestamp

@@ -3,7 +3,9 @@ import ScoreDial from '@ck/score-dial'
 import { RATINGS } from '@ck/score-dial/lib/constants'
 import Bill from './Bill'
 import CreditCards from './CreditCards'
+import Offers from './Offers'
 import Job from './Job'
+import OfferSet from '../content/cards'
 import Layout from './Layout'
 import { daily } from '../utils/time'
 import { MinimumWageEarner } from '../content/jobs'
@@ -18,6 +20,7 @@ import { scoreDelta } from '../utils/creditTools'
 export default class GameState extends Component {
     constructor(props) {
         super(props)
+        var offersInit = [];
         this.state = {
             credit: {
                 score: 650
@@ -28,13 +31,16 @@ export default class GameState extends Component {
             job: MinimumWageEarner,
             bills: [],
             cards: [],
+            offers: Offers.factory([], 650, this.props.gameTime),
             activeCard: null,
         }
         this.updateCredit = this.updateCredit.bind(this)
         this.updateFinances = this.updateFinances.bind(this)
         this.updateJob = this.updateJob.bind(this)
+        this.updateOffers = this.updateOffers.bind(this)
         this.startNewCard = this.startNewCard.bind(this)
         this.payBill = this.payBill.bind(this)
+        this.applyForOffer = this.applyForOffer.bind(this)
         this.payCardBalance = this.payCardBalance.bind(this)
         this.defectBill = this.defectBill.bind(this)
         this.selectActiveCard = this.selectActiveCard.bind(this)
@@ -46,7 +52,15 @@ export default class GameState extends Component {
         daily(nextProps.gameTime, () => {
             this.updateFinances('cash', this.state.job.salary)
             this.updateCredit('score', scoreDelta(this.state.cards))
+            this.updateOffers(this.state.offers)
         })
+    }
+
+    updateOffers(offersArray) {
+        var randomOffer = OfferSet[Math.floor(Math.random()*OfferSet.length)]
+        if(offersArray.length < 4) {
+            const offers = Offers.factory(offersArray, randomOffer.limit, randomOffer.rate, randomOffer.minScore, this.props.gameTime)
+        }
     }
 
     updateCredit(key, delta) {
@@ -72,8 +86,18 @@ export default class GameState extends Component {
         }, promotion.cost.time)
     }
 
-    startNewCard() {
-        const cards = CreditCards.factory(this.state.cards, this.props.gameTime, 1000)
+    startNewCard(limit, interest) {
+        const cards = CreditCards.factory(this.state.cards, this.props.gameTime, limit)
+        this.updateCredit('score', -10)
+    }
+
+    applyForOffer(offer) {
+        if(this.state.credit.score > offer.minScore) {
+            this.startNewCard(offer.limit, offer.interestRate)
+        }
+        const offers = this.state.offers
+        remove(offers, o => o.id === offer.id)
+        this.setState({ offers })
     }
 
     payBill(bill, method) {
@@ -117,7 +141,7 @@ export default class GameState extends Component {
     }
 
     render() {
-        const { credit, finances, job, bills, cards } = this.state
+        const { credit, finances, job, bills, cards, offers } = this.state
         const { gameTime, children } = this.props
         if (credit.score < 300) {
             return (
@@ -131,16 +155,14 @@ export default class GameState extends Component {
                     head={(
                         <div className="header">
                             <ScoreDial score={{ value: credit.score, label: scoreBand.text }} width="140px" />
-                            <h3>Credit Utilization: {totalCardsUtilization(this.state.cards)}%</h3>
+                            <h3>Credit Utilization: {totalCardsUtilization(cards)}%</h3>
                             <h2>Bank: ${this.total(finances)}</h2>
                         </div>
                     )}
                     side={(
                         <div>
                             <CreditCards.Component cards={cards} pay={this.payCardBalance} selectActiveCard={this.selectActiveCard} activeCardIndex={this.state.activeCard}/>
-                            <button onClick={this.startNewCard}>
-                                New Card
-                            </button>
+                            <Offers.Component offers={offers} apply={this.applyForOffer} score={this.state.credit.score}/>
                         </div>
                     )}
                     body={(

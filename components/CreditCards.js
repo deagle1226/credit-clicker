@@ -1,6 +1,5 @@
 import React from 'react'
 import map from 'lodash/map'
-import forEach from 'lodash/forEach'
 
 class CreditCard {
     constructor(gameTime, limit) {
