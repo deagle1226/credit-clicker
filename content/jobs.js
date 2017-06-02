@@ -38,7 +38,7 @@ export const MediumBusinessOwner = {
 }
 
 export const UltraWageEarner = {
-    title: 'Ultra Wage Earner',
+    title: 'Job of the Hut',
     wage: 100,
     salary: 1000,
     promotions: []

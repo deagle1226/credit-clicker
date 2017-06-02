@@ -14,7 +14,7 @@ class GameContainer extends Component {
 
     componentDidMount() {
         if (this.context.profile) {
-            const gameTime = store.get(`CK_Clicker_profiles-${this.context.profile}-time`)
+            const gameTime = parseInt(store.get(`CK_Clicker_profiles-${this.context.profile}-time`), 10)
             this.setState({ start: -gameTime }, () => {
                 this.loop = window.requestAnimationFrame(this.update)
             })
