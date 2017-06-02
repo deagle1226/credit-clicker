@@ -41,6 +41,7 @@ function CCComponent({card, id, payCard, select, selected}) {
                 .credit-card {
                     background: #eee;
                     padding: 10px;
+                    margin-bottom: 5px;
                 }
             `}</style>
         </div>
