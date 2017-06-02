@@ -37,7 +37,8 @@ export function scoreDelta(creditcards, currentTime) {
     return delta
 }
 
-function avgCardsAge(creditcards, currentTime) {
+export function avgCardsAge(creditcards, currentTime) {
+    if(creditcards.length == 0) return 0
     var totalTime = 0;
     for(var i=0; i<creditcards.length; i++) {
         totalTime += currentTime - creditcards[i].id

@@ -10,13 +10,14 @@ import Job from './Job'
 import OfferSet from '../content/cards'
 import Layout from './Layout'
 import { daily } from '../utils/time'
+import { DAY, HOUR } from '../config'
 import { MinimumWageEarner } from '../content/jobs'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 import remove from 'lodash/remove'
 import find from 'lodash/find'
 import inRange from 'lodash/inRange'
-import { totalCardsUtilization } from '../utils/creditTools'
+import { totalCardsUtilization, avgCardsAge } from '../utils/creditTools'
 import { scoreDelta } from '../utils/creditTools'
 
 class GameState extends Component {
@@ -186,7 +187,9 @@ class GameState extends Component {
                     head={(
                         <div className="header">
                             <ScoreDial score={{ value: credit.score, label: scoreBand.text }} width="140px" />
-                            <h3>Credit Utilization: {totalCardsUtilization(cards)}%</h3>
+                            <h3>Credit Utilization: {totalCardsUtilization(cards)}%<br/>
+                            Avg. Age of Accounts: {Math.round(avgCardsAge(cards, this.props.gameTime) / DAY)}
+                            </h3>
                             <h2>Bank: ${this.total(finances)}</h2>
                         </div>
                     )}
