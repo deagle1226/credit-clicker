@@ -69,7 +69,6 @@ class GameState extends Component {
         if(offersArray.length < 4) {
             const offers = Offers.factory(offersArray, randomOffer.limit, randomOffer.rate, randomOffer.minScore, this.props.gameTime)
         }
-        return offers;
     }
 
 
