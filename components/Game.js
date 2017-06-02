@@ -167,7 +167,8 @@ class GameState extends Component {
     }
 
     defectBill(bill) {
-        this.updateCredit('score', -(bill.amount / 100))
+        var amount = Math.max(-(bill.amount / 100), -5)
+        this.updateCredit('score', amount)
     }
 
     total(amounts) {

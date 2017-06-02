@@ -3,11 +3,11 @@ import { DAY, HOUR } from '../config'
 const severity = {
     excellent: {
         color: "#3DDB93",
-        value: 3
+        value: 5
     },
     verygood: {
         color: "#0091ff",
-        value: 2
+        value: 3
     },
     good: {
         color: "#FFD324",
