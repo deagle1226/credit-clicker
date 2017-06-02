@@ -122,6 +122,11 @@ class GameState extends Component {
 
     startNewCard(limit, interest) {
         const cards = CreditCards.factory(this.state.cards, this.props.gameTime, limit)
+        this.setState({ cards }, () => {
+            if(!this.state.activeCard) {
+                this.selectActiveCard(0)
+            }
+        })
         this.updateCredit('score', -10)
     }
 
@@ -181,7 +186,7 @@ class GameState extends Component {
     }
 
     selectActiveCard(index) {
-        this.state.activeCard = index;
+        this.setState({ activeCard: index })
     }
 
     render() {
