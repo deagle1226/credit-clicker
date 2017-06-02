@@ -35,7 +35,7 @@ function CCComponent({card, id, payCard, select, selected}) {
             <header>Card #{Math.round(card.id)}</header>
             <b>${card.balance} / ${card.limit}</b>
             <div>
-                <button onClick={() => payCard(card, card.balance)}>Pay</button>
+                {card.balance > 0 && <button onClick={() => payCard(card, card.balance)}>Pay</button>}
             </div>
             <style jsx>{`
                 .credit-card {
