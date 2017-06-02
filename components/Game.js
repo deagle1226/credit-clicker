@@ -13,6 +13,7 @@ import { daily } from '../utils/time'
 import { DAY, HOUR } from '../config'
 import { MinimumWageEarner } from '../content/jobs'
 import map from 'lodash/map'
+import pullAt from 'lodash/pullAt'
 import reduce from 'lodash/reduce'
 import remove from 'lodash/remove'
 import find from 'lodash/find'
@@ -60,16 +61,19 @@ class GameState extends Component {
         setTimeout(() => this.setState({ bills }), 1)
         daily(nextProps.gameTime, () => {
             this.updateFinances('cash', this.state.job.salary)
-            this.updateOffers(this.state.offers)
+            this.updateOffers()
             setTimeout(() => this.updateCredit('score', scoreDelta(this.state.cards, this.props.gameTime)), 1)
         })
     }
 
-    updateOffers(offersArray) {
+    updateOffers() {
+        var offersArray = this.state.offers
         var randomOffer = OfferSet[Math.floor(Math.random()*OfferSet.length)]
-        if(offersArray.length < 4) {
-            const offers = Offers.factory(offersArray, randomOffer.limit, randomOffer.rate, randomOffer.minScore, this.props.gameTime)
+        if(offersArray.length >= 4) {
+            pullAt(offersArray, [Math.floor(Math.random()*offersArray.length)])
         }
+        const offers = Offers.factory(offersArray, randomOffer.limit, randomOffer.rate, randomOffer.minScore, this.props.gameTime)
+        this.setState({ offers })
     }
 
     save() {
