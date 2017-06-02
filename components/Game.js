@@ -155,7 +155,7 @@ class GameState extends Component {
     }
 
     defectBill(bill) {
-        this.updateCredit('score', -Math.round(bill.amount / 10))
+        this.updateCredit('score', -(bill.amount / 100))
     }
 
     total(amounts) {
@@ -185,7 +185,7 @@ class GameState extends Component {
                 <Layout
                     head={(
                         <div className="header">
-                            <ScoreDial score={{ value: credit.score, label: scoreBand.text }} width="140px" />
+                            <ScoreDial score={{ value: Math.round(credit.score), label: scoreBand.text }} width="140px" />
                             <h3>Credit Utilization: {totalCardsUtilization(cards)}%</h3>
                             <h2>Bank: ${this.total(finances)}</h2>
                         </div>
