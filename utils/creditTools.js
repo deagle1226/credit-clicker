@@ -16,12 +16,10 @@ export function totalCardsUtilization(creditcards) {
 export function scoreDelta(creditcards, currentTime) {
     var cardsUtilization = totalCardsUtilization(creditcards)
     var delta = 0
-    if(cardsUtilization <= 10) { delta += 3 }
+    if(cardsUtilization < 10) { delta += 3 }
     else if(cardsUtilization <= 30) { delta += 2 }
-    else if(cardsUtilization <= 50) { delta += 1 }
-    else if(cardsUtilization <= 70) { delta += 0 }
-    else if(cardsUtilization <= 80) { delta += -1 }
-    else if(cardsUtilization <= 90) { delta += -2 }
+    else if(cardsUtilization <= 50) { delta += 0 }
+    else if(cardsUtilization <= 75) { delta += -1 }
     else delta += -3
 
     var creditAge = avgCardsAge(creditcards, currentTime) / DAY
