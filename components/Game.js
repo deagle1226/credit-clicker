@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import store from 'store'
 import ScoreDial from '@ck/score-dial'
 import { RATINGS } from '@ck/score-dial/lib/constants'
 import Bill from './Bill'
@@ -17,7 +19,7 @@ import inRange from 'lodash/inRange'
 import { totalCardsUtilization } from '../utils/creditTools'
 import { scoreDelta } from '../utils/creditTools'
 
-export default class GameState extends Component {
+class GameState extends Component {
     constructor(props) {
         super(props)
         var offersInit = [];
@@ -31,7 +33,7 @@ export default class GameState extends Component {
             job: MinimumWageEarner,
             bills: [],
             cards: [],
-            offers: Offers.factory([], 650, this.props.gameTime),
+            offers: [],
             activeCard: null,
         }
         this.updateCredit = this.updateCredit.bind(this)
@@ -44,15 +46,21 @@ export default class GameState extends Component {
         this.payCardBalance = this.payCardBalance.bind(this)
         this.defectBill = this.defectBill.bind(this)
         this.selectActiveCard = this.selectActiveCard.bind(this)
+        this.load = this.load.bind(this)
+        this.save = this.save.bind(this)
+    }
+
+    componentDidMount() {
+        this.load()
     }
 
     componentWillReceiveProps(nextProps) {
         const bills = Bill.factory(this.state.bills, nextProps.gameTime)
-        this.setState({ bills })
+        setTimeout(() => this.setState({ bills }), 1)
         daily(nextProps.gameTime, () => {
             this.updateFinances('cash', this.state.job.salary)
-            this.updateCredit('score', scoreDelta(this.state.cards))
             this.updateOffers(this.state.offers)
+            setTimeout(() => this.updateCredit('score', scoreDelta(this.state.cards)), 1)
         })
     }
 
@@ -60,6 +68,24 @@ export default class GameState extends Component {
         var randomOffer = OfferSet[Math.floor(Math.random()*OfferSet.length)]
         if(offersArray.length < 4) {
             const offers = Offers.factory(offersArray, randomOffer.limit, randomOffer.rate, randomOffer.minScore, this.props.gameTime)
+        }
+        return offers;
+    }
+
+
+    save() {
+        const profile = this.context.profile
+        store.set(`CK_Clicker_profiles-${profile}`, this.state)
+        store.set(`CK_Clicker_profiles-${profile}-time`, this.props.gameTime)
+    }
+
+    load() {
+        const profile = this.context.profile
+        const state = store.get(`CK_Clicker_profiles-${profile}`)
+        if (state) {
+            this.setState(state)
+        } else {
+            console.warn('no save data for ', `CK_Clicker_profiles-${profile}`)
         }
     }
 
@@ -92,6 +118,17 @@ export default class GameState extends Component {
     }
 
     applyForOffer(offer) {
+        console.log(offer.minScore + "/" + this.state.credit.score)
+        var chance = Math.random();
+        var success = chance < 0.4;
+        if(offer.minScore + 100 < this.state.credit.score) {
+            success = chance < 0.9
+        } else if(offer.minScore < this.state.credit.score) {
+            success = chance < 0.75
+        } else if(offer.minScore - 50 < this.state.credit.score) {
+            success = chance < 0.6
+        }
+
         if(this.state.credit.score > offer.minScore) {
             this.startNewCard(offer.limit, offer.interestRate)
         }
@@ -172,6 +209,9 @@ export default class GameState extends Component {
                         <Bill.Component bills={bills} pay={this.payBill} defect={this.defectBill} gameTime={gameTime} />
                     )}
                 />
+                <button style={{ position: 'absolute', right: 0, top: 15 }} onClick={this.save}>
+                    save
+                </button>
                 <style jsx>{`
                     .header {
                         display: flex;
@@ -184,3 +224,9 @@ export default class GameState extends Component {
         )
     }
 }
+
+GameState.contextTypes = {
+    profile: PropTypes.string
+}
+
+export default GameState

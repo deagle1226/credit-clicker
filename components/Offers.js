@@ -16,16 +16,20 @@ function OfferFactory(offers, limit, rate, minScore, gameTime) {
 }
 
 function OfferComponent({offer, apply, score}) {
-    if(offer.minScore - 50 < score) {
-        
+    var odds = "Poor"
+    if(offer.minScore + 100 < score) {
+        odds = "Excellent"
+    } else if(offer.minScore < score) {
+        odds = "Good"
+    } else if(offer.minScore - 50 < score) {
+        odds = "Fair"
     }
-
     return (
         <div>
             <header>Card</header>
             <b>Limit: ${offer.limit}, Interest Rate: {offer.interestRate}%</b>
             <div>
-                <button onClick={() => apply(offer)}>Apply</button>
+                <button onClick={() => apply(offer)}>{odds}</button>
             </div>
         </div>
     )

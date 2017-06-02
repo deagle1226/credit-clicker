@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import store from 'store'
 
-export default class GameContainer extends Component {
+class GameContainer extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -11,7 +13,14 @@ export default class GameContainer extends Component {
     }
 
     componentDidMount() {
-        this.loop = window.requestAnimationFrame(this.update)
+        if (this.context.profile) {
+            const gameTime = store.get(`CK_Clicker_profiles-${this.context.profile}-time`)
+            this.setState({ start: -gameTime }, () => {
+                this.loop = window.requestAnimationFrame(this.update)
+            })
+        } else {
+            this.loop = window.requestAnimationFrame(this.update)
+        }
     }
 
     componentWillUnmount() {
@@ -36,3 +45,9 @@ export default class GameContainer extends Component {
         )
     }
 }
+
+GameContainer.contextTypes = {
+    profile: PropTypes.string
+}
+
+export default GameContainer
