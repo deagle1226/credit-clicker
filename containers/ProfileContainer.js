@@ -50,7 +50,7 @@ class ProfileContainer extends React.Component {
             )
         }
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit} className="profile-form">
                 <label>
                     New Profile: <input type="text" name="profile" onChange={this.handleChange} />
                 </label>
@@ -61,6 +61,16 @@ class ProfileContainer extends React.Component {
                         <button key={idx} onClick={() => this.selectProfile(profile)}>{profile}</button>
                     ))}
                 </div>
+                <style jsx>{`
+                    .profile-form {
+                        display: block;
+                        max-width: 400px;
+                        margin: 100px auto;
+                        background: #eee;
+                        text-align: center;
+                        padding: 20px;
+                    }
+                `}</style>
             </form>
         )
     }
