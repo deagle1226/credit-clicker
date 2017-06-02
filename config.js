@@ -3,8 +3,8 @@ export const DAY = HOUR * 24
 
 export default {
     bill: {
-        spawnRate: DAY * 0.1,
+        spawnRate: DAY * 0.4,
         amount: (gameTime) => Math.round(gameTime / 500),
-        due: (gameTime) => gameTime + (12 * HOUR)
+        due: (gameTime) => gameTime + (24 * HOUR)
     }
 }

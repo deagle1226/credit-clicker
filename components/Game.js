@@ -71,7 +71,6 @@ class GameState extends Component {
         }
     }
 
-
     save() {
         const profile = this.context.profile
         store.set(`CK_Clicker_profiles-${profile}`, this.state)
